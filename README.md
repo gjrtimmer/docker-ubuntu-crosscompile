@@ -1,3 +1,3 @@
 # crosscompile
 
-Corsscompile container
+Docker Ubuntu container for Cross-Compilation
