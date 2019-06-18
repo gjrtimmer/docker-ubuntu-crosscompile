@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -39,8 +39,8 @@ ARG VCS_REF
 
 LABEL \
 	nl.timmertech.build-date=${BUILD_DATE} \
-	nl.timmertech.name=ubuntu-crosscompile \
+	nl.timmertech.name=crosscompile \
 	nl.timmertech.vendor=timmertech.nl \
-	nl.timmertech.vcs-url="https://gitlab.timmertech.nl/docker/ubuntu/crosscompile.git" \
+	nl.timmertech.vcs-url="https://gitlab.timmertech.nl/docker/crosscompile.git" \
 	nl.timmertech.vcs-ref=${VCS_REF} \
 	nl.timmertech.license=MIT
