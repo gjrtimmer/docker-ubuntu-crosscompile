@@ -1,14 +1,16 @@
 FROM ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
+
 ENV TZ=Europe/Amsterdam
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apt-get update -y && \
-	apt-get install -y software-properties-common && \
+	apt-get install -y --no-install-recommends software-properties-common && \
 	add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
 	apt-get update -y && \
-    apt-get install -y \
+    apt-get install --no-install-recommends -y \
 		build-essential \
 		cmake \
 		make \
@@ -33,6 +35,9 @@ RUN apt-get update -y && \
 		zip \
 		curl \
 		wget && \
+	apt-get autoremove -y && \
+	apt-get clean -y && \
+	rm -rf /var/lib/apt/lists/* && \
 	mkdir /build && \
 	chown -R nobody:nogroup /builder
 
