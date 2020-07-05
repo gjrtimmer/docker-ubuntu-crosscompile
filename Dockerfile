@@ -39,7 +39,7 @@ RUN apt-get update -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/* && \
 	mkdir /build && \
-	chown -R nobody:nogroup /builder
+	chown -R nobody:nogroup /build
 
 USER nobody
 ENV HOME /build
