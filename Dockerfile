@@ -1,11 +1,9 @@
 FROM ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
-
 ENV TZ=Europe/Amsterdam
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
 RUN apt-get update -y && \
 	apt-get install -y software-properties-common && \
 	add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
@@ -34,15 +32,30 @@ RUN apt-get update -y && \
 		unzip \
 		zip \
 		curl \
-		wget
+		wget && \
+	mkdir /build && \
+	chown -R nobody:nogroup /builder
 
+USER nobody
+ENV HOME /build
+WORKDIR /build
+
+ARG PROJECT
 ARG BUILD_DATE
-ARG VCS_REF
+ARG GIT_COMMIT
+ARG GIT_URL
+ARG URL
 
-LABEL \
-	nl.timmertech.build-date=${BUILD_DATE} \
-	nl.timmertech.name=crosscompile \
+LABEL maintainer="G.J.R. Timmer" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name=${PROJECT} \
+    org.label-schema.url="${URL}" \
+    org.label-schema.vcs-url="${GIT_URL}" \
+    org.label-schema.vcs-ref=${GIT_COMMIT} \
+	nl.timmertech.name=${PROJECT} \
 	nl.timmertech.vendor=timmertech.nl \
-	nl.timmertech.vcs-url="https://gitlab.timmertech.nl/docker/crosscompile.git" \
-	nl.timmertech.vcs-ref=${VCS_REF} \
+	nl.timmertech.url=${URL} \
+	nl.timmertech.vcs-url="${GIT_URL}" \
+	nl.timmertech.vcs-ref=${GIT_COMMIT} \
 	nl.timmertech.license=MIT

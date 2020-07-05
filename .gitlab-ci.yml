@@ -1,17 +1,25 @@
 stages:
   - build
 
-.docker-login: &docker-login
+.dlogin: &dlogin
   before_script:
     - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
 
-.docker-build: &docker-build
+.dbuild: &dbuild
   script:
     - docker build --pull --force-rm=true --squash 
-        --build-arg VCS_REF=`git rev-parse --short HEAD` 
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
+        --build-arg=PROJECT=timmertech/crosscompile
+        --build-arg=BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
+        --build-arg=GIT_COMMIT=`git rev-parse --short HEAD` 
+        --build-arg=GIT_URL=${GIT_URL} 
+        --build-arg=URL=${URL} 
         --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
+
+variables:
+  GIT_COMMIT: ${CI_COMMIT_SHORT_SHA}
+  GIT_URL: ${CI_PROJECT_URL}.git
+  URL: ${CI_PROJECT_URL}
 
 docker:latest:
   stage: build
@@ -19,14 +27,17 @@ docker:latest:
     - master
   variables:
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}
-  <<: *docker-login
-  <<: *docker-build
+  <<: *dlogin
+  <<: *dbuild
 
-docker:release:
+docker:branches:
   stage: build
   only:
+    - branches
+  except:
+    - master
     - tags
   variables:
-    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}
-  <<: *docker-login
-  <<: *docker-build
+    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_SLUG}
+  <<: *dlogin
+  <<: *dbuild
