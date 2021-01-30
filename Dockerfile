@@ -12,6 +12,8 @@ RUN apt-get update -y && \
 	apt-get update -y && \
     apt-get install -y \
 		build-essential \
+		bash \
+		vim \
 		cmake \
 		make \
 		binutils-mingw-w64 \
@@ -38,6 +40,8 @@ RUN apt-get update -y && \
 
 ARG BUILD_DATE
 ARG VCS_REF
+ARG DOCKER_IMAGE
+ARG UBUNTU_VERSION
 
 LABEL \
 	nl.timmertech.build-date=${BUILD_DATE} \
@@ -45,4 +49,6 @@ LABEL \
 	nl.timmertech.vendor=timmertech.nl \
 	nl.timmertech.vcs-url="https://gitlab.timmertech.nl/docker/crosscompile.git" \
 	nl.timmertech.vcs-ref=${VCS_REF} \
+	org.label-schema.docker.image="${DOCKER_IMAGE}" \
+	org.label-schema.ubuntu-version="${UBUNTU_VERSION}" \
 	nl.timmertech.license=MIT
