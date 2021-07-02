@@ -1,4 +1,5 @@
-FROM ubuntu:latest
+ARG DOCKER_IMAGE_FROM
+FROM ${DOCKER_IMAGE_FROM}
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -40,17 +41,21 @@ RUN apt-get update -y && \
 
 ARG BUILD_DATE
 ARG VCS_REF
+ARG CI_PROJECT_NAME
+ARG CI_PROJECT_URL
 ARG DOCKER_IMAGE
 ARG UBUNTU_VERSION
 
 LABEL \
-	nl.timmertech.build-date=${BUILD_DATE} \
-	nl.timmertech.name=crosscompile \
-	nl.timmertech.vendor=timmertech.nl \
-	nl.timmertech.vcs-url="https://gitlab.timmertech.nl/docker/crosscompile.git" \
-	nl.timmertech.vcs-ref=${VCS_REF} \
-	org.label-schema.docker.image="${DOCKER_IMAGE}" \
-	org.label-schema.ubuntu-version="${UBUNTU_VERSION}" \
-	nl.timmertech.license=MIT
+	maintainer="G.J.R. Timmer <gjr.timmer@gmail.com>" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name=${CI_PROJECT_NAME} \
+    org.label-schema.url="${CI_PROJECT_URL}" \
+    org.label-schema.vcs-url="${CI_PROJECT_URL}.git" \
+    org.label-schema.vcs-ref=${VCS_REF} \
+    org.label-schema.docker.image="${DOCKER_IMAGE}" \
+    org.label-schema.ubuntu-version="${UBUNTU_VERSION}" \
+	org.label-schema.license=MIT
 
 # EOF
