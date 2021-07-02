@@ -16,6 +16,7 @@ variables:
 ################################################################################
 update:
   stage: build
+  interruptible: true
   only:
     - master
     - schedules
@@ -43,6 +44,7 @@ update:
 
 docker.hub:
   stage: trigger
+  interruptible: true
   only:
     - schedules
   script:
