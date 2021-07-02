@@ -52,3 +52,5 @@ LABEL \
 	org.label-schema.docker.image="${DOCKER_IMAGE}" \
 	org.label-schema.ubuntu-version="${UBUNTU_VERSION}" \
 	nl.timmertech.license=MIT
+
+# EOF
