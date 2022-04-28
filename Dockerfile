@@ -20,8 +20,6 @@ RUN apt-get update -y && \
 		binutils-mingw-w64 \
 		gcc-mingw-w64-i686 \
 		gcc-mingw-w64 \
-		g++-7 \
-		g++-8 \
 		g++-9 \
 		g++-10 \
 		git \
@@ -31,7 +29,7 @@ RUN apt-get update -y && \
 		file \
 		libz-dev \
 		perl \
-		python \
+		python3.8 \
 		tcl \
 		tcl-dev \
 		unzip \
