@@ -30,7 +30,7 @@ RUN	apt-get install -y software-properties-common && \
 		file \
 		libz-dev \
 		perl \
-		python3.8 \
+		python3 \
 		tcl \
 		tcl-dev \
 		unzip \
