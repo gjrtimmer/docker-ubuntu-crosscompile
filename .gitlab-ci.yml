@@ -1,20 +1,10 @@
 image: registry.timmertech.nl/docker/docker:latest
 
-
-stages:
-  - build
-  - trigger
-
-
 variables:
-  CI: 'true'
+  CI: "true"
   DOCKER_DRIVER: overlay2
 
-
-################################################################################
-# Job Configuration
-################################################################################
-update:
+build:
   stage: build
   interruptible: true
   only:
@@ -23,32 +13,31 @@ update:
   variables:
     DOCKER_FILE: Dockerfile
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
-    DOCKER_IMAGE_FROM: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/ubuntu:latest
   before_script:
-    - echo "${CI_DEPENDENCY_PROXY_PASSWORD}" | docker login -u "${CI_DEPENDENCY_PROXY_USER}" --password-stdin "${CI_DEPENDENCY_PROXY_SERVER}"
+    - echo "${DOCKER_PROXY_PASS}" | docker login -u "${DOCKER_PROXY_USER}" --password-stdin "${DOCKER_PROXY_HOST}"
     - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
   script:
     - docker build --pull
-        --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-        --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
-        --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
-        --build-arg DOCKER_IMAGE_FROM=${DOCKER_IMAGE_FROM}
-        --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
-        --build-arg UBUNTU_VERSION=`docker run --rm -t ${DOCKER_IMAGE_FROM} cat /etc/os-release|grep VERSION_ID|cut -d '=' -f 2|tr -d '"'|tr -d '\r'`
-        --file=${DOCKER_FILE}
-        --tag=${DOCKER_IMAGE} .
-  after_script:
+      --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
+      --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
+      --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
+      --build-arg DOCKER_PROXY=${DOCKER_PROXY_HOST}
+      --build-arg UBUNTU_VERSION=`docker run --rm -t ${DOCKER_IMAGE_FROM} cat /etc/os-release|grep VERSION_ID|cut -d '=' -f 2|tr -d '"'|tr -d '\r'`
+      --file=${DOCKER_FILE}
+      --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
 
-
-docker.hub:
-  stage: trigger
-  interruptible: true
+dockerhub:
+  stage: publish
+  variables:
+    DOCKER_IMAGE_HUB: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
   only:
+    - master
     - schedules
+  before_script:
+    - echo "${DOCKERHUB_PASS}" | docker login -u ${DOCKERHUB_USER} --password-stdin ${DOCKERHUB_REGISTRY}
   script:
-    - curl -s -H -X POST ${DOCKERHUB_TRIGGER} > /dev/null
-
-
-# EOF
+    - docker tag ${DOCKER_IMAGE} ${DOCKER_IMAGE_HUB}
+    - docker push ${DOCKER_IMAGE_HUB}
