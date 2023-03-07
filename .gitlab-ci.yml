@@ -1,5 +1,9 @@
 image: registry.timmertech.nl/docker/docker:latest
 
+stages:
+  - build
+  - publish
+
 variables:
   CI: "true"
   DOCKER_DRIVER: overlay2
