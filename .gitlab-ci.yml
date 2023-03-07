@@ -1,9 +1,5 @@
 image: registry.timmertech.nl/docker/docker:latest
 
-stages:
-  - build
-  - publish
-
 variables:
   CI: "true"
   DOCKER_DRIVER: overlay2
@@ -34,7 +30,7 @@ build:
     - docker push ${DOCKER_IMAGE}
 
 dockerhub:
-  stage: publish
+  stage: deploy
   variables:
     DOCKER_IMAGE_HUB: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
   only:
