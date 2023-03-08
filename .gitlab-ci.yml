@@ -14,8 +14,8 @@ build:
     DOCKER_FILE: Dockerfile
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
   before_script:
-    - echo "${DOCKER_PROXY_PASS}" | docker login -u "${DOCKER_PROXY_USER}" --password-stdin "${DOCKER_PROXY_HOST}"
-    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
+    - docker login ${DOCKER_PROXY_HOST}
+    - docker login ${CI_REGISTRY}
   script:
     - docker build --pull
       --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
