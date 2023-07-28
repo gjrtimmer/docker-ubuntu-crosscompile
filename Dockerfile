@@ -25,8 +25,6 @@ RUN	apt-get update -y && \
 	g++-10 \
 	git \
 	ca-certificates \
-	gcc-multilib \
-	g++-multilib \
 	file \
 	libz-dev \
 	perl \
