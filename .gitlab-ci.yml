@@ -17,7 +17,6 @@ stages:
     DOCKER_IMAGE_BASE: "ubuntu:latest"
     BUILD_ARGS: >-
       --build-arg DOCKER_IMAGE_BASE=${DOCKER_IMAGE_BASE}
-      --build-arg UBUNTU_VERSION=$(docker run --rm -t ${DOCKER_IMAGE_BASE} cat /etc/os-release|grep VERSION_ID|cut -d '=' -f 2|tr -d '"'|tr -d '\r')
 
 build:
   extends: .build

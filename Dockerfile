@@ -43,7 +43,6 @@ ARG VCS_REF
 ARG CI_PROJECT_NAME
 ARG CI_PROJECT_URL
 ARG DOCKER_IMAGE
-ARG UBUNTU_VERSION
 
 LABEL \
 	maintainer="G.J.R. Timmer <gjr.timmer@gmail.com>" \
@@ -54,7 +53,6 @@ LABEL \
 	org.label-schema.vcs-url="${CI_PROJECT_URL}.git" \
 	org.label-schema.vcs-ref=${VCS_REF} \
 	org.label-schema.docker.image="${DOCKER_IMAGE}" \
-	org.label-schema.ubuntu-version="${UBUNTU_VERSION}" \
 	org.label-schema.license=MIT
 
 # EOF
