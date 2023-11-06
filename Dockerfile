@@ -1,6 +1,4 @@
-ARG DOCKER_PROXY
-ARG DOCKER_IMAGE_BASE=ubuntu:latest
-FROM ${DOCKER_PROXY}/${DOCKER_IMAGE_BASE}
+FROM registry.timmertech.nl/docker/ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -14,8 +12,6 @@ RUN	apt-get update -y && \
 	apt-get update -y && \
 	apt-get install -y \
 	build-essential \
-	bash \
-	vim \
 	cmake \
 	make \
 	binutils-mingw-w64 \
@@ -23,18 +19,11 @@ RUN	apt-get update -y && \
 	gcc-mingw-w64 \
 	g++-9 \
 	g++-10 \
-	git \
-	ca-certificates \
-	file \
 	libz-dev \
 	perl \
 	python3 \
 	tcl \
-	tcl-dev \
-	unzip \
-	zip \
-	curl \
-	wget
+	tcl-dev
 
 ARG BUILD_DATE
 ARG VCS_REF
