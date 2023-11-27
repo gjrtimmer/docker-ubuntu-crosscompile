@@ -9,17 +9,13 @@ stages:
   - build
   - dockerhub
 
-.build:
+build:
   extends: .docker-build-multi
   variables:
-    DOCKER_PROXY: "ENABLED"
-    DOCKER_HUB: "ENABLED"
     PLATFORM: "linux/arm64,linux/amd64"
-    DOCKER_IMAGE_BASE: "ubuntu:latest"
+    DOCKER_HUB: "ENABLED"
     DOCKER_ARGS: >-
-      --build-arg DOCKER_IMAGE_BASE=${DOCKER_IMAGE_BASE}
+      --cache-from=type=registry,ref=registry.timmertech.nl/docker/ubuntu:latest
+      --cache-from=type=registry,ref=${DOCKER_IMAGE}
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
-
-build:
-  extends: .build
