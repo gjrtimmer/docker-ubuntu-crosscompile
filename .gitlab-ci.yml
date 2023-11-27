@@ -16,7 +16,7 @@ stages:
     DOCKER_HUB: "ENABLED"
     PLATFORM: "linux/arm64,linux/amd64"
     DOCKER_IMAGE_BASE: "ubuntu:latest"
-    BUILD_ARGS: >-
+    DOCKER_BUILD_ARGS: >-
       --build-arg DOCKER_IMAGE_BASE=${DOCKER_IMAGE_BASE}
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
