@@ -3,7 +3,7 @@ default:
 
 include:
   - project: templates/ci
-    file: docker.yml
+    file: default.yml
 
 stages:
   - build
@@ -19,3 +19,4 @@ build:
       --cache-from=type=registry,ref=${DOCKER_IMAGE}
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
+    HEALTH_CHECK_UUID: 874cdb73-e521-47fb-a973-61f63a05d387
