@@ -3,13 +3,16 @@ include:
   - project: templates/ci
     file: default.yml
 
+variables:
+  DOCKER_IMAGE_BASE: ${CI_REGISTRY}/docker/ubuntu/cache:latest
+
 build:
   extends: .docker-build-multi
   variables:
     PLATFORM: "linux/arm64,linux/amd64"
     DOCKER_HUB: "ENABLED"
     DOCKER_ARGS: >-
-      --cache-from=type=registry,ref=registry.timmertech.nl/docker/ubuntu/cache:latest
+      --cache-from=type=registry,ref=${DOCKER_IMAGE_BASE}
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
     HEALTH_CHECK_UUID: 874cdb73-e521-47fb-a973-61f63a05d387
