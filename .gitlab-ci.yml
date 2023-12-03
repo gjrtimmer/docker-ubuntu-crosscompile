@@ -4,6 +4,7 @@ include:
     file: default.yml
 
 variables:
+  DOCKER_BUILDX_PIPELINE: $CI_PIPELINE_ID
   UPSTREAM_IMAGE: registry.timmertech.nl/docker/ubuntu
 
 amd64:
@@ -12,6 +13,10 @@ amd64:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
+    DOCKER_ARGS: >-
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
+      --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
     HEALTH_CHECK_UUID: ecda2334-6241-44b8-8cb5-3983caf66f62
 
 arm64:
@@ -20,6 +25,10 @@ arm64:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
+    DOCKER_ARGS: >-
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
+      --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
     HEALTH_CHECK_UUID: fd111ec6-6370-4af5-8d32-30044f7c3bec
 
 build:
@@ -32,7 +41,6 @@ build:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
     PLATFORM: "linux/arm64,linux/amd64"
-    DOCKER_BUILDX_JOB: $CI_JOB_ID
     DOCKER_HUB: "ENABLED"
     DOCKER_ARGS: >-
       --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
