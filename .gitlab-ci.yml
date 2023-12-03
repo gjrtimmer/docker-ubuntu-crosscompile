@@ -6,8 +6,27 @@ include:
 variables:
   UPSTREAM_IMAGE: registry.timmertech.nl/docker/ubuntu
 
+amd64:
+  extends: .docker-build-amd64
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    HEALTH_CHECK_UUID: ecda2334-6241-44b8-8cb5-3983caf66f62
+
+arm64:
+  extends: .docker-build-arm64
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    HEALTH_CHECK_UUID: fd111ec6-6370-4af5-8d32-30044f7c3bec
+
 build:
   extends: .docker-build-multi
+  needs:
+    - amd64
+    - arm64
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -19,6 +38,8 @@ build:
       --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
       --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
       --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
+      --cache-from=type=registry,ref=${DOCKER_IMAGE_CACHE_PATH}:amd64
+      --cache-from=type=registry,ref=${DOCKER_IMAGE_CACHE_PATH}:arm64
       --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
