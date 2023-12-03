@@ -13,6 +13,7 @@ build:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
     PLATFORM: "linux/arm64,linux/amd64"
+    DOCKER_BUILDX_JOB: $CI_JOB_ID
     DOCKER_HUB: "ENABLED"
     DOCKER_ARGS: >-
       --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
