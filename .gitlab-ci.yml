@@ -4,7 +4,7 @@ include:
     file: default.yml
 
 variables:
-  DOCKER_IMAGE_BASE: ${CI_REGISTRY}/docker/ubuntu/cache:latest
+  UPSTREAM_IMAGE: registry.timmertech.nl/docker/ubuntu
 
 build:
   extends: .docker-build-multi
@@ -12,7 +12,10 @@ build:
     PLATFORM: "linux/arm64,linux/amd64"
     DOCKER_HUB: "ENABLED"
     DOCKER_ARGS: >-
-      --cache-from=type=registry,ref=${DOCKER_IMAGE_BASE}
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
+      --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB}
     HEALTH_CHECK_UUID: 874cdb73-e521-47fb-a973-61f63a05d387
