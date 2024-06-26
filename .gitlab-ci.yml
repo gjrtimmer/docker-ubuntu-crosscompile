@@ -10,11 +10,6 @@ include:
       - when: always
     inputs:
       dockerhub: true
-      args: >-
-        --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
-        --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
-        --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
-        --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
       tags: >-
         --tag=${DOCKER_IMAGE_PATH}:latest
         --tag=${DOCKER_IMAGE_HUB_PATH}:latest
@@ -25,6 +20,7 @@ include:
       - if: $CI_COMMIT_TAG
     inputs:
       name: release
+      dockerhub: true
       tags: >-
         --tag=${DOCKER_IMAGE_PATH}:$CI_COMMIT_TAG
         --tag=${DOCKER_IMAGE_HUB_PATH}:$CI_COMMIT_TAG
