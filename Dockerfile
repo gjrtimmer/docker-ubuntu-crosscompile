@@ -1,4 +1,4 @@
-FROM registry.gitlab.timmertech.nl/docker/ubuntu:23.04
+FROM harbor.local/gitlab/docker/ubuntu:23.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
