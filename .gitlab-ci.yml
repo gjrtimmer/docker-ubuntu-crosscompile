@@ -3,7 +3,7 @@ variables:
   UPSTREAM_IMAGE: ${CI_REGISTRY}/docker/ubuntu
 
 include:
-  - component: $CI_SERVER_FQDN/templates/components/workflow/default@0.1.0
+  - component: $CI_SERVER_FQDN/templates/components/workflow/default@0.1.1
   - component: $CI_SERVER_FQDN/templates/components/publish/live@0.3.0
   - component: $CI_SERVER_FQDN/templates/components/publish/hub@0.3.0
 
