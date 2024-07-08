@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json
 variables:
-  UPSTREAM_IMAGE: ${CI_REGISTRY}/docker/ubuntu
+  UPSTREAM_IMAGE: $CI_REGISTRY/docker/ubuntu
 
 include:
   - component: $CI_SERVER_FQDN/templates/components/workflow/default@0.1.1
@@ -13,9 +13,9 @@ include:
         when: never
       - when: always
     inputs:
-      tag: ${DOCKER_IMAGE_PATH}:latest
+      tag: $DOCKER_IMAGE_PATH:latest
       tags: >-
-        --tag=${DOCKER_IMAGE_HUB_PATH}:latest
+        --tag=$DOCKER_IMAGE_HUB_PATH:latest
       healthcheck-uuid: 874cdb73-e521-47fb-a973-61f63a05d387
 
   - component: $CI_SERVER_FQDN/templates/components/docker/multi@1.0.0
@@ -23,6 +23,6 @@ include:
       - if: $CI_COMMIT_TAG
     inputs:
       name: release
-      tag: ${DOCKER_IMAGE_PATH}:$CI_COMMIT_TAG
+      tag: $DOCKER_IMAGE_PATH:$CI_COMMIT_TAG
       tags: >-
-        --tag=${DOCKER_IMAGE_HUB_PATH}:$CI_COMMIT_TAG
+        --tag=$DOCKER_IMAGE_HUB_PATH:$CI_COMMIT_TAG
